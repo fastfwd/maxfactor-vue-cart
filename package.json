@@ -1,7 +1,7 @@
 {
     "name": "maxfactor-vue-cart",
     "version": "2.0.5",
-    "description": "Maxfactor Vue.js Shopping Cart",
+    "description": "Hosted fastfwd; Maxfactor Vue.js Shopping Cart",
     "main": "dist/index.js",
     "files": [
         "dist/index.js"
@@ -15,9 +15,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dewsign/maxfactor-vue-cart.git"
+        "url": "git+https://github.com/fastfwd/maxfactor-vue-cart.git"
     },
-    "author": "Marco Mark (marco.mark@dewsign.co.uk)",
+    "author": "Marco Mark (marco.mark@dewsign.co.uk), Genesis Gallardo<genesis@fastfwd.com>",
     "license": "MIT",
     "devDependencies": {
         "babel-cli": "^6.26.0",
