@@ -1,6 +1,6 @@
 {
     "name": "maxfactor-vue-cart",
-    "version": "2.0.5",
+    "version": "2.0.7",
     "description": "Hosted fastfwd; Maxfactor Vue.js Shopping Cart",
     "main": "dist/index.js",
     "files": [
