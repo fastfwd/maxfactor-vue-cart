@@ -17,7 +17,7 @@
         "type": "git",
         "url": "git+https://github.com/fastfwd/maxfactor-vue-cart.git"
     },
-    "author": "Marco Mark (marco.mark@dewsign.co.uk)",
+    "author": "Marco Mark <marco.mark@dewsign.co.uk>",
     "license": "MIT",
     "devDependencies": {
         "babel-cli": "^6.26.0",
