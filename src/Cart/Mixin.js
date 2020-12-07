@@ -58,7 +58,7 @@ export default {
 
             const codeRemainder = this.cartCollection.discount.monetary - totalItemsIncTax
 
-            if (codeRemainder > 0) {
+            if (codeRemainder >= 0) {
                 this.currentCheckout.payment = { provider: 'free' }
                 return this.cartCollection.discount.monetary - codeRemainder
             }
