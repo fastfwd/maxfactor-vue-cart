@@ -124,6 +124,10 @@ var Data = {
     }
 };
 
+var placeOrderLabel = "Place order";
+
+var placingOrderLabel = "Placing order...";
+
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -887,16 +891,28 @@ var MaxfactorCheckoutMixin = {
             handler: function handler() {
                 if (!this.waitingForResult) {
                     this.formIsLoading = false;
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false;
+                        this.placeOrderBtn.innerText = placeOrderLabel;
+                    }
                     return;
                 }
 
                 if (this.hasPaymentErrors) {
                     this.formIsLoading = false;
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false;
+                        this.placeOrderBtn.innerText = placeOrderLabel;
+                    }
                     return;
                 }
 
                 if (!this.hasPaymentToken) {
                     this.formIsLoading = false;
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false;
+                        this.placeOrderBtn.innerText = placeOrderLabel;
+                    }
                     return;
                 }
 
@@ -1055,6 +1071,9 @@ var MaxfactorCheckoutMixin = {
          *
          */
         processCheckout: function processCheckout(event) {
+            this.placeOrderBtn = event.target;
+            this.placeOrderBtn.disabled = true;
+            this.placeOrderBtn.innerText = placingOrderLabel;
             this.action = event.target.getAttribute('data-url');
             this.formIsLoading = true;
 
@@ -1280,6 +1299,10 @@ var MaxfactorCheckoutMixin = {
 
                 _this3.form.errors = response.data;
                 _this3.formIsLoading = false;
+                if (_this3.placeOrderBtn) {
+                    _this3.placeOrderBtn.disabled = false;
+                    _this3.placeOrderBtn.innerText = placeOrderLabel;
+                }
             });
         },
 
