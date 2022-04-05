@@ -2,7 +2,11 @@ import { FormMixin } from 'maxfactor-vue-support'
 import collect from 'collect.js'
 import Make from '../Helpers/Make'
 import Tell from '../Helpers/Tell'
-import { CheckoutStages as Stage } from '../Schema'
+import {
+    CheckoutStages as Stage,
+    placeOrderLabel,
+    placingOrderLabel,
+} from '../Schema'
 
 export default {
     data() {
@@ -10,6 +14,8 @@ export default {
             action: '',
             waitingForResult: false,
             showMobileCheckoutSummary: false,
+            placeOrderLabel,
+            placingOrderLabel,
         }
     },
 
@@ -81,7 +87,7 @@ export default {
         },
 
         shippingCountry() {
-            return this.currentCheckout.shipping.address_country
+            return ((this.currentCheckout || {}).shipping || {}).address_country || ''
         },
 
         useShippingForBilling() {
@@ -157,16 +163,28 @@ export default {
             handler() {
                 if (!this.waitingForResult) {
                     this.formIsLoading = false
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false
+                        this.placeOrderBtn.innerText = placeOrderLabel
+                    }
                     return
                 }
 
                 if (this.hasPaymentErrors) {
                     this.formIsLoading = false
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false
+                        this.placeOrderBtn.innerText = placeOrderLabel
+                    }
                     return
                 }
 
                 if (!this.hasPaymentToken) {
                     this.formIsLoading = false
+                    if (this.placeOrderBtn) {
+                        this.placeOrderBtn.disabled = false
+                        this.placeOrderBtn.innerText = placeOrderLabel
+                    }
                     return
                 }
 
@@ -204,7 +222,9 @@ export default {
         },
 
         clearBillingItem(item) {
-            this.currentCheckout.billing[item] = ''
+            if ((this.currentCheckout || {}).billing && this.currentCheckout.billing[item]) {
+                this.currentCheckout.billing[item] = ''
+            }
         },
 
         syncShippingToBilling() {
@@ -338,6 +358,9 @@ export default {
          *
          */
         processCheckout(event) {
+            this.placeOrderBtn = event.target
+            this.placeOrderBtn.disabled = true
+            this.placeOrderBtn.innerText = placingOrderLabel
             this.action = event.target.getAttribute('data-url')
             this.formIsLoading = true
 
@@ -562,6 +585,10 @@ export default {
             }).catch(({ response }) => {
                 this.form.errors = response.data
                 this.formIsLoading = false
+                if (this.placeOrderBtn) {
+                    this.placeOrderBtn.disabled = false
+                    this.placeOrderBtn.innerText = placeOrderLabel
+                }
             })
         },
 
