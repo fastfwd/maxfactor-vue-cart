@@ -174,7 +174,9 @@ var Make = function () {
     createClass(Make, null, [{
         key: "cloneOf",
         value: function cloneOf(object) {
-            return JSON.parse(JSON.stringify(object));
+            if (object) {
+                return JSON.parse(JSON.stringify(object));
+            }
         }
     }, {
         key: "ucFirst",
