@@ -98,3 +98,8 @@ export default {
     CountryData,
     CheckoutStages,
 }
+
+
+export const placeOrderLabel = 'Place order'
+
+export const placingOrderLabel = 'Placing order...'

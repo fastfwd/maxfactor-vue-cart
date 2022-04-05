@@ -103,6 +103,10 @@ var Schema = {
     CheckoutStages: CheckoutStages
 };
 
+var placeOrderLabel = 'Place order';
+
+var placingOrderLabel = 'Placing order...';
+
 var Data = {
     mixins: [DatastoreMixin],
 
@@ -123,10 +127,6 @@ var Data = {
         this.loadData('account');
     }
 };
-
-var placeOrderLabel = "Place order";
-
-var placingOrderLabel = "Placing order...";
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -174,7 +174,10 @@ var Make = function () {
     createClass(Make, null, [{
         key: "cloneOf",
         value: function cloneOf(object) {
-            return JSON.parse(JSON.stringify(object));
+            if (object) {
+                return JSON.parse(JSON.stringify(object));
+            }
+            return {};
         }
     }, {
         key: "ucFirst",
@@ -748,7 +751,9 @@ var MaxfactorCheckoutMixin = {
         return {
             action: '',
             waitingForResult: false,
-            showMobileCheckoutSummary: false
+            showMobileCheckoutSummary: false,
+            placeOrderLabel: placeOrderLabel,
+            placingOrderLabel: placingOrderLabel
         };
     },
 
@@ -818,7 +823,7 @@ var MaxfactorCheckoutMixin = {
             return collect(this.currentCheckout.payment.paymentMethod).contains('id');
         },
         shippingCountry: function shippingCountry() {
-            return this.currentCheckout.shipping.address_country;
+            return ((this.currentCheckout || {}).shipping || {}).address_country || "";
         },
         useShippingForBilling: function useShippingForBilling() {
             return this.currentCheckout ? this.currentCheckout.useShipping : false;
@@ -948,7 +953,9 @@ var MaxfactorCheckoutMixin = {
             this.currentCheckout.billing[item] = this.currentCheckout.shipping[item];
         },
         clearBillingItem: function clearBillingItem(item) {
-            this.currentCheckout.billing[item] = '';
+            if ((this.currentCheckout || {}).billing && this.currentCheckout.billing[item]) {
+                this.currentCheckout.billing[item] = '';
+            }
         },
         syncShippingToBilling: function syncShippingToBilling() {
             var _this = this;

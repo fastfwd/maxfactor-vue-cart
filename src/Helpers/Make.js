@@ -1,6 +1,9 @@
 class Make {
     static cloneOf(object) {
-        return JSON.parse(JSON.stringify(object))
+        if (object) {
+            return JSON.parse(JSON.stringify(object))
+        }
+        return {}
     }
 
     static ucFirst(value) {
