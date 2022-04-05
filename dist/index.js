@@ -823,7 +823,7 @@ var MaxfactorCheckoutMixin = {
             return collect(this.currentCheckout.payment.paymentMethod).contains('id');
         },
         shippingCountry: function shippingCountry() {
-            return ((this.currentCheckout || {}).shipping || {}).address_country || "";
+            return ((this.currentCheckout || {}).shipping || {}).address_country || '';
         },
         useShippingForBilling: function useShippingForBilling() {
             return this.currentCheckout ? this.currentCheckout.useShipping : false;
