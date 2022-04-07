@@ -947,6 +947,9 @@ var MaxfactorCheckoutMixin = {
 
     methods: {
         syncShippingItemToBilling: function syncShippingItemToBilling(item) {
+            if (!this.currentCheckout.billing || !this.currentCheckout.shipping) {
+                return;
+            }
             this.currentCheckout.billing[item] = this.currentCheckout.shipping[item];
         },
         clearBillingItem: function clearBillingItem(item) {
