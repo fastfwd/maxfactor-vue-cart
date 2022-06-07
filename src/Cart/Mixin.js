@@ -86,7 +86,19 @@ export default {
 
             if (!this.cartDiscountPercentage) return parseFloat(0.00)
 
+            if (this.cartCollection.discount.products.length > 0) {
+                return Make.round(this.applicableProductsNetTotal * (this.cartDiscountPercentage / 100.0));
+            }
+
             return Make.round(this.cartNetTotal * (this.cartDiscountPercentage / 100.0))
+        },
+
+        applicableProductsNetTotal() {
+            let self = this;
+            return parseFloat(this.itemsCollection.sum(function (item) {
+                return self.cartCollection.discount.products.includes(item.productId)
+                    ? item.quantity * item.unitPrice : 0;
+            }));
         },
 
         /**
@@ -102,7 +114,7 @@ export default {
                 .itemsCollection
                 .sum((item) => {
                     let itemTotal = item.quantity * item.unitPrice
-                    if (this.cartDiscountPercentage) {
+                    if (this.cartDiscountPercentage && this.cartCollection.discount.products.includes(item.productId)) {
                         itemTotal -= itemTotal * (this.cartDiscountPercentage / 100.0)
                     }
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true))
