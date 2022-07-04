@@ -1547,14 +1547,7 @@ var MaxfactorCheckoutMixin = {
                 if (response.data.countryCode && _this4.currentCheckout.stage <= CheckoutStages.SHIPPING) {
                     _this4.$set(_this4, 'currentCheckout', _extends({}, _this4.currentCheckout, {
                         taxApplicable: response.data.taxApplicable,
-                        taxOptional: response.data.taxOptional,
-                        shippingMethod: {
-                            id: 0,
-                            name: '',
-                            price: 0.00,
-                            taxRate: 0.00,
-                            poa: false
-                        }
+                        taxOptional: response.data.taxOptional
                     }));
                 }
             }).catch(function (error) {

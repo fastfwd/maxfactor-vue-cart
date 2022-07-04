@@ -815,13 +815,6 @@ export default {
                         ...this.currentCheckout,
                         taxApplicable: response.data.taxApplicable,
                         taxOptional: response.data.taxOptional,
-                        shippingMethod: {
-                            id: 0,
-                            name: '',
-                            price: 0.00,
-                            taxRate: 0.00,
-                            poa: false,
-                        },
                     })
                 }
             }).catch((error) => {
