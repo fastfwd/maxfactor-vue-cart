@@ -358,6 +358,10 @@ export default {
          *
          */
         processCheckout(event) {
+            if (this.formIsLoading) {
+                return;
+            }
+
             this.placeOrderBtn = event.target
             this.placeOrderBtn.disabled = true
             this.placeOrderBtn.innerText = placingOrderLabel
@@ -747,6 +751,17 @@ export default {
         handleInvalidCheckout(checkoutView = Stage.DEFAULT, uid) {
             let serverStage = Number(Tell.serverVariable(`serverStage.${uid}`))
             if (!serverStage) serverStage = Stage.DEFAULT
+
+            /**
+             * Check if there's a payment error
+             */
+             const url_string = window.location.href; 
+             const url = new URL(url_string);
+             const payment_error = url.searchParams.get("error");
+             if (payment_error && this.currentCheckout.stage == Stage.COMPLETE) {
+                 this.currentCheckout.stage = Stage.PAYMENT;
+                 return false;
+             }
 
             /**
              * Current checkout stage is the same and the stage they are trying to view

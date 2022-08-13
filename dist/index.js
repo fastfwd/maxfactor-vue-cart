@@ -1078,6 +1078,10 @@ var MaxfactorCheckoutMixin = {
          *
          */
         processCheckout: function processCheckout(event) {
+            if (this.formIsLoading) {
+                return;
+            }
+
             this.placeOrderBtn = event.target;
             this.placeOrderBtn.disabled = true;
             this.placeOrderBtn.innerText = placingOrderLabel;
@@ -1483,6 +1487,17 @@ var MaxfactorCheckoutMixin = {
 
             var serverStage = Number(Tell.serverVariable('serverStage.' + uid));
             if (!serverStage) serverStage = CheckoutStages.DEFAULT;
+
+            /**
+             * Check if there's a payment error
+             */
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var payment_error = url.searchParams.get("error");
+            if (payment_error && this.currentCheckout.stage == CheckoutStages.COMPLETE) {
+                this.currentCheckout.stage = CheckoutStages.PAYMENT;
+                return false;
+            }
 
             /**
              * Current checkout stage is the same and the stage they are trying to view
