@@ -39,7 +39,7 @@ export default {
         },
 
         calculatedDiscountPercentageFromMonetary() {
-            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100).toFixed(2)
+            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100)
         },
 
         /**
@@ -86,7 +86,7 @@ export default {
 
             if (!this.cartDiscountPercentage) return parseFloat(0.00)
 
-            if (this.cartCollection.discount.products.length > 0) {
+            if (this.cartCollection.discount.hasOwnProperty('products') && this.cartCollection.discount.products.length > 0) {
                 return Make.round(this.applicableProductsNetTotal * (this.cartDiscountPercentage / 100.0));
             }
 
@@ -119,8 +119,15 @@ export default {
                     if (this.cartDiscountPercentage
                         && this.cartCollection.hasOwnProperty('discount')
                         && this.cartCollection.discount.hasOwnProperty('products')
-                        && this.cartCollection.discount.products.includes(item.productId)) {
-                        itemTotal -= itemTotal * (this.cartDiscountPercentage / 100.0)
+                        && !this.cartCollection.discount.products.length) {
+                        itemTotal -= itemTotal * (this.cartDiscountPercentage / 100.0);
+                    } else {
+                        if (this.cartDiscountPercentage
+                            && this.cartCollection.hasOwnProperty('discount')
+                            && this.cartCollection.discount.hasOwnProperty('products')
+                            && this.cartCollection.discount.products.includes(item.productId)) {
+                            itemTotal -= itemTotal * (this.cartDiscountPercentage / 100.0);
+                        }
                     }
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true))
                 })
