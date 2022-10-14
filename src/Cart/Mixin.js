@@ -121,14 +121,14 @@ export default {
                         && this.cartCollection.hasOwnProperty('discount')
                         && this.cartCollection.discount.hasOwnProperty('products')
                         && !this.cartCollection.discount.products.length) {
-                            emainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
+                            remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
                         itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
                     } else {
                         if (this.cartDiscountPercentage
                             && this.cartCollection.hasOwnProperty('discount')
                             && this.cartCollection.discount.hasOwnProperty('products')
                             && this.cartCollection.discount.products.includes(item.productId)) {
-                                emainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
+                                remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
                             itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
                         }
                     }
