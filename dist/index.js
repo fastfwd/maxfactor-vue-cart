@@ -406,17 +406,7 @@ var MaxfactorCartMixin = {
 
             if (!this.cartDiscountPercentage) return parseFloat(0.00);
 
-            if (this.cartCollection.discount.products.length > 0) {
-                return Make.round(this.applicableProductsNetTotal * (this.cartDiscountPercentage / 100.0));
-            }
-
             return Make.round(this.cartNetTotal * (this.cartDiscountPercentage / 100.0));
-        },
-        applicableProductsNetTotal: function applicableProductsNetTotal() {
-            var self = this;
-            return parseFloat(this.itemsCollection.sum(function (item) {
-                return self.cartCollection.hasOwnProperty('discount') && self.cartCollection.discount.hasOwnProperty('products') && self.cartCollection.discount.products.includes(item.productId) ? item.quantity * item.unitPrice : 0;
-            }));
         },
 
 
@@ -431,7 +421,7 @@ var MaxfactorCartMixin = {
 
             var totalItemsIncTax = this.itemsCollection.sum(function (item) {
                 var itemTotal = item.quantity * item.unitPrice;
-                if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && _this2.cartCollection.discount.products.includes(item.productId)) {
+                if (_this2.cartDiscountPercentage) {
                     itemTotal -= itemTotal * (_this2.cartDiscountPercentage / 100.0);
                 }
                 return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true));
