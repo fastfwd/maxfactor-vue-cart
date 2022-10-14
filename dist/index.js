@@ -361,7 +361,7 @@ var MaxfactorCartMixin = {
             return parseFloat(discountPercentage);
         },
         calculatedDiscountPercentageFromMonetary: function calculatedDiscountPercentageFromMonetary() {
-            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100);
+            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100).toFixed(2);
         },
 
 
@@ -406,7 +406,7 @@ var MaxfactorCartMixin = {
 
             if (!this.cartDiscountPercentage) return parseFloat(0.00);
 
-            if (this.cartCollection.discount.hasOwnProperty('products') && this.cartCollection.discount.products.length > 0) {
+            if (this.cartCollection.discount.products.length > 0) {
                 return Make.round(this.applicableProductsNetTotal * (this.cartDiscountPercentage / 100.0));
             }
 
@@ -431,12 +431,8 @@ var MaxfactorCartMixin = {
 
             var totalItemsIncTax = this.itemsCollection.sum(function (item) {
                 var itemTotal = item.quantity * item.unitPrice;
-                if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && !_this2.cartCollection.discount.products.length) {
+                if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && _this2.cartCollection.discount.products.includes(item.productId)) {
                     itemTotal -= itemTotal * (_this2.cartDiscountPercentage / 100.0);
-                } else {
-                    if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && _this2.cartCollection.discount.products.includes(item.productId)) {
-                        itemTotal -= itemTotal * (_this2.cartDiscountPercentage / 100.0);
-                    }
                 }
                 return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true));
             });
