@@ -89,6 +89,16 @@ export default {
             return Make.round(this.cartNetTotal * (this.cartDiscountPercentage / 100.0))
         },
 
+        applicableProductsNetTotal() {
+            let self = this;
+            return parseFloat(this.itemsCollection.sum(function (item) {
+                return (self.cartCollection.hasOwnProperty('discount')
+                    && self.cartCollection.discount.hasOwnProperty('products')
+                    && self.cartCollection.discount.products.includes(item.productId))
+                    ? item.quantity * item.unitPrice : 0;
+            })).toFixed(2);
+        },
+
         /**
          * Figure out the discount type
          */
@@ -103,15 +113,26 @@ export default {
                 .itemsCollection
                 .sum((item) => {
                     let itemTotal = item.quantity * item.unitPrice
-                    if (this.cartDiscountPercentage) {
-                        remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
+                    if (this.cartDiscountPercentage
+                        && this.cartCollection.hasOwnProperty('discount')
+                        && this.cartCollection.discount.hasOwnProperty('products')
+                        && !this.cartCollection.discount.products.length) {
+                            remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
                         itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
+                    } else {
+                        if (this.cartDiscountPercentage
+                            && this.cartCollection.hasOwnProperty('discount')
+                            && this.cartCollection.discount.hasOwnProperty('products')
+                            && this.cartCollection.discount.products.includes(item.productId)) {
+                                remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
+                            itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
+                        }
                     }
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true)).toFixed(2)
                 })
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount)
-                + parseFloat(this.cartShippingTotalIncTax)
+            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount).toFixed(2)
+                + parseFloat(this.cartShippingTotalIncTax).toFixed(2)
 
             return totalItemsIncTax
         },

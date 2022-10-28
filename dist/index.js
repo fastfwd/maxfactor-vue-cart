@@ -342,12 +342,12 @@ var MaxfactorCartMixin = {
         cartNetTotal: function cartNetTotal() {
             return parseFloat(this.itemsCollection.sum(function (item) {
                 return item.quantity * item.unitPrice;
-            }));
+            })).toFixed(2);
         },
         cartDiscountedNetTotal: function cartDiscountedNetTotal() {
             return parseFloat(this.itemsCollection.sum(function (item) {
                 return item.quantity * item.unitPrice;
-            }) - this.cartDiscountTotal);
+            }) - this.cartDiscountTotal).toFixed(2);
         },
         cartDiscountPercentage: function cartDiscountPercentage() {
             var discountPercentage = this.cartCollection.discount.percentage || this.calculatedDiscountPercentageFromMonetary || null;
@@ -358,7 +358,7 @@ var MaxfactorCartMixin = {
                 this.currentCheckout.payment = { provider: 'free' };
             }
 
-            return parseFloat(discountPercentage);
+            return parseFloat(discountPercentage).toFixed(2);
         },
         calculatedDiscountPercentageFromMonetary: function calculatedDiscountPercentageFromMonetary() {
             return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100).toFixed(2);
@@ -374,10 +374,10 @@ var MaxfactorCartMixin = {
             if (!this.cartCollection.discount.monetary) return Make.round(0.00);
 
             var totalItemsIncTax = this.itemsCollection.sum(function (item) {
-                return parseFloat(_this.taxTotal(item.quantity * item.unitPrice, item.taxRate, true));
+                return parseFloat(_this.taxTotal(item.quantity * item.unitPrice, item.taxRate, true)).toFixed(2);
             });
 
-            totalItemsIncTax += parseFloat(this.cartShippingTotal(true, true));
+            totalItemsIncTax += parseFloat(this.cartShippingTotal(true, true)).toFixed(2);
 
             var codeRemainder = this.cartCollection.discount.monetary - totalItemsIncTax;
 
@@ -408,6 +408,12 @@ var MaxfactorCartMixin = {
 
             return Make.round(this.cartNetTotal * (this.cartDiscountPercentage / 100.0));
         },
+        applicableProductsNetTotal: function applicableProductsNetTotal() {
+            var self = this;
+            return parseFloat(this.itemsCollection.sum(function (item) {
+                return self.cartCollection.hasOwnProperty('discount') && self.cartCollection.discount.hasOwnProperty('products') && self.cartCollection.discount.products.includes(item.productId) ? item.quantity * item.unitPrice : 0;
+            })).toFixed(2);
+        },
 
 
         /**
@@ -419,23 +425,30 @@ var MaxfactorCartMixin = {
         totalItemsIncTax: function totalItemsIncTax() {
             var _this2 = this;
 
+            var remainingDiscount = parseFloat(this.cartDiscountTotal).toFixed(2);
             var totalItemsIncTax = this.itemsCollection.sum(function (item) {
                 var itemTotal = item.quantity * item.unitPrice;
-                if (_this2.cartDiscountPercentage) {
-                    itemTotal -= itemTotal * (_this2.cartDiscountPercentage / 100.0);
+                if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && !_this2.cartCollection.discount.products.length) {
+                    remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
+                    itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
+                } else {
+                    if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && _this2.cartCollection.discount.products.includes(item.productId)) {
+                        remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
+                        itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
+                    }
                 }
-                return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true));
+                return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true)).toFixed(2);
             });
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax) + parseFloat(this.cartShippingTotalIncTax);
+            totalItemsIncTax = parseFloat(totalItemsIncTax).toFixed(2) + parseFloat(this.cartShippingTotalIncTax).toFixed(2);
 
             return totalItemsIncTax;
         },
         cartSubTotal: function cartSubTotal() {
-            return Make.round(parseFloat(this.totalItemsIncTax), 2);
+            return Make.round(parseFloat(this.totalItemsIncTax).toFixed(2), 2);
         },
         cartTaxTotal: function cartTaxTotal() {
-            return parseFloat(this.cartSubTotal - this.cartDiscountedNetTotal - this.cartShippingTotal(false));
+            return parseFloat(this.cartSubTotal - this.cartDiscountedNetTotal - this.cartShippingTotal(false)).toFixed(2);
         },
         cartShippingTotalExcTax: function cartShippingTotalExcTax() {
             return this.cartShippingTotal(false);
@@ -639,7 +652,7 @@ var MaxfactorCartMixin = {
             var rate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
             var inclusive = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
-            var taxRate = parseFloat(rate !== null ? rate : this.taxRate);
+            var taxRate = parseFloat(rate !== null ? rate : this.taxRate).toFixed(2);
 
             if (window.location.href.includes('/checkout/') && this.taxChargable) {
                 return Make.money(parseFloat(inclusive ? amount : 0) + parseFloat(amount) * taxRate);
