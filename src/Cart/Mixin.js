@@ -124,18 +124,13 @@ export default {
                             remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
                         itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
                     } else {
-                        if (this.cartDiscountPercentage
-                            && this.cartCollection.hasOwnProperty('discount')
-                            && this.cartCollection.discount.hasOwnProperty('products')
-                            && this.cartCollection.discount.products.includes(item.productId)) {
-                                remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
-                            itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
-                        }
+                        remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
+                        itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
                     }
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true)).toFixed(2)
                 })
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax).toFixed(2)
+            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount).toFixed(2)
                 + parseFloat(this.cartShippingTotalIncTax).toFixed(2)
 
             return totalItemsIncTax

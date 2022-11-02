@@ -436,15 +436,13 @@ var MaxfactorCartMixin = {
                     remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
                     itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
                 } else {
-                    if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && _this2.cartCollection.discount.products.includes(item.productId)) {
-                        remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
-                        itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
-                    }
+                    remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
+                    itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
                 }
                 return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true)).toFixed(2);
             });
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax).toFixed(2) + parseFloat(this.cartShippingTotalIncTax).toFixed(2);
+            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount).toFixed(2) + parseFloat(this.cartShippingTotalIncTax).toFixed(2);
 
             return totalItemsIncTax;
         },
