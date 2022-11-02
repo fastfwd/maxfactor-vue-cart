@@ -406,7 +406,7 @@ var MaxfactorCartMixin = {
 
             if (!this.cartDiscountPercentage) return parseFloat(0.00);
 
-            if (this.cartCollection.discount.products.length > 0) {
+            if (this.cartCollection.discount.hasOwnProperty('products') && this.cartCollection.discount.products.length > 0) {
                 return Make.round(this.applicableProductsNetTotal * (this.cartDiscountPercentage / 100.0));
             }
 
