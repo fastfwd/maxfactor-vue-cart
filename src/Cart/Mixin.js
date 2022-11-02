@@ -135,7 +135,7 @@ export default {
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true)).toFixed(2)
                 })
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount).toFixed(2)
+            totalItemsIncTax = parseFloat(totalItemsIncTax).toFixed(2)
                 + parseFloat(this.cartShippingTotalIncTax).toFixed(2)
 
             return totalItemsIncTax
