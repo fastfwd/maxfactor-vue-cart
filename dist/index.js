@@ -433,10 +433,10 @@ var MaxfactorCartMixin = {
             var totalItemsIncTax = this.itemsCollection.sum(function (item) {
                 var itemTotal = item.quantity * item.unitPrice;
                 if (_this2.cartDiscountPercentage && _this2.cartCollection.hasOwnProperty('discount') && _this2.cartCollection.discount.hasOwnProperty('products') && !_this2.cartCollection.discount.products.length) {
-                    remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
+                    remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
                     itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
                 } else {
-                    remainingDiscount -= parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
+                    remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2);
                     itemTotal -= parseFloat(itemTotal * (_this2.cartDiscountPercentage / 100.0)).toFixed(2);
                 }
                 return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true)).toFixed(2);
