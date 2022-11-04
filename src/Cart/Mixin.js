@@ -14,14 +14,14 @@ export default {
          * Get the total amount for all items in the cart
          */
         cartNetTotal() {
-            return parseFloat(this.itemsCollection.sum(item => item.quantity * item.unitPrice)).toFixed(2)
+            return parseFloat(this.itemsCollection.sum(item => item.quantity * item.unitPrice))
         },
 
         cartDiscountedNetTotal() {
             return parseFloat(
                 this.itemsCollection.sum(item => item.quantity * item.unitPrice)
                 - this.cartDiscountTotal,
-            ).toFixed(2)
+            )
         },
 
         cartDiscountPercentage() {
@@ -35,11 +35,11 @@ export default {
                 this.currentCheckout.payment = { provider: 'free' }
             }
 
-            return parseFloat(discountPercentage).toFixed(2)
+            return parseFloat(discountPercentage)
         },
 
         calculatedDiscountPercentageFromMonetary() {
-            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100).toFixed(2)
+            return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100)
         },
 
         /**
@@ -52,9 +52,9 @@ export default {
                 .itemsCollection
                 .sum(item => parseFloat(
                     this.taxTotal(item.quantity * item.unitPrice, item.taxRate, true),
-                ).toFixed(2))
+                ))
 
-            totalItemsIncTax += parseFloat(this.cartShippingTotal(true, true)).toFixed(2)
+            totalItemsIncTax += parseFloat(this.cartShippingTotal(true, true))
 
             const codeRemainder = this.cartCollection.discount.monetary - totalItemsIncTax
 
@@ -100,7 +100,7 @@ export default {
                     && self.cartCollection.discount.hasOwnProperty('products')
                     && self.cartCollection.discount.products.includes(item.productId))
                     ? item.quantity * item.unitPrice : 0;
-            })).toFixed(2);
+            }));
         },
 
         /**
@@ -112,7 +112,7 @@ export default {
         },
 
         totalItemsIncTax() {
-            var remainingDiscount = parseFloat(this.cartDiscountTotal).toFixed(2);
+            var remainingDiscount = parseFloat(this.cartDiscountTotal);
             let totalItemsIncTax = this
                 .itemsCollection
                 .sum((item) => {
@@ -121,29 +121,29 @@ export default {
                         && this.cartCollection.hasOwnProperty('discount')
                         && this.cartCollection.discount.hasOwnProperty('products')
                         && !this.cartCollection.discount.products.length) {
-                            remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
-                        itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
+                            remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)))
+                        itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0));
                     } else {
-                        remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2)).toFixed(2)
-                        itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)).toFixed(2);
+                        remainingDiscount = parseFloat(remainingDiscount - parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0)))
+                        itemTotal -= parseFloat(itemTotal * (this.cartDiscountPercentage / 100.0));
                     }
-                    return parseFloat(this.taxTotal(itemTotal, item.taxRate, true)).toFixed(2)
+                    return parseFloat(this.taxTotal(itemTotal, item.taxRate, true))
                 })
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount).toFixed(2)
-                + parseFloat(this.cartShippingTotalIncTax).toFixed(2)
+            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount)
+                + parseFloat(this.cartShippingTotalIncTax)
 
             return totalItemsIncTax
         },
 
         cartSubTotal() {
-            return Make.round(parseFloat(this.totalItemsIncTax).toFixed(2), 2)
+            return Make.round(parseFloat(this.totalItemsIncTax), 2)
         },
 
         cartTaxTotal() {
             return parseFloat(this.cartSubTotal
                 - this.cartDiscountedNetTotal
-                - this.cartShippingTotal(false)).toFixed(2)
+                - this.cartShippingTotal(false))
         },
 
         cartShippingTotalExcTax() {
@@ -341,7 +341,7 @@ export default {
         },
 
         taxTotal(amount, rate = null, inclusive = null) {
-            const taxRate = parseFloat((rate !== null) ? rate : this.taxRate).toFixed(2)
+            const taxRate = parseFloat((rate !== null) ? rate : this.taxRate)
 
             if (window.location.href.includes('/checkout/') && this.taxChargable) {
                 return Make.money(parseFloat(inclusive ? amount : 0)
