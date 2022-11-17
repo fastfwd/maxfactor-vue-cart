@@ -39,6 +39,9 @@ export default {
         },
 
         calculatedDiscountPercentageFromMonetary() {
+            if (this.cartCollection.discount.monetary > this.cartNetTotal) {
+                return parseFloat(100);
+            }
             return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100)
         },
 
@@ -130,8 +133,8 @@ export default {
                     return parseFloat(this.taxTotal(itemTotal, item.taxRate, true))
                 })
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount)
-                + parseFloat(this.cartShippingTotalIncTax)
+            totalItemsIncTax = parseFloat(parseFloat(totalItemsIncTax) - parseFloat(remainingDiscount)
+              + parseFloat(this.cartShippingTotalIncTax)).toFixed(2)
 
             return totalItemsIncTax
         },
@@ -141,9 +144,8 @@ export default {
         },
 
         cartTaxTotal() {
-            return parseFloat(this.cartSubTotal
-                - this.cartDiscountedNetTotal
-                - this.cartShippingTotal(false))
+            // FFT is not using tax
+            return parseFloat(0)
         },
 
         cartShippingTotalExcTax() {
