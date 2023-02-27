@@ -361,6 +361,9 @@ var MaxfactorCartMixin = {
             return parseFloat(discountPercentage);
         },
         calculatedDiscountPercentageFromMonetary: function calculatedDiscountPercentageFromMonetary() {
+            if (this.cartCollection.discount.monetary > this.cartNetTotal) {
+                return parseFloat(100);
+            }
             return parseFloat((this.cartCollection.discount.monetary || 0) / this.cartNetTotal * 100);
         },
 
@@ -442,7 +445,7 @@ var MaxfactorCartMixin = {
                 return parseFloat(_this2.taxTotal(itemTotal, item.taxRate, true));
             });
 
-            totalItemsIncTax = parseFloat(totalItemsIncTax - remainingDiscount) + parseFloat(this.cartShippingTotalIncTax);
+            totalItemsIncTax = parseFloat(parseFloat(totalItemsIncTax) - parseFloat(remainingDiscount) + parseFloat(this.cartShippingTotalIncTax)).toFixed(2);
 
             return totalItemsIncTax;
         },
@@ -450,7 +453,8 @@ var MaxfactorCartMixin = {
             return Make.round(parseFloat(this.totalItemsIncTax), 2);
         },
         cartTaxTotal: function cartTaxTotal() {
-            return parseFloat(this.cartSubTotal - this.cartDiscountedNetTotal - this.cartShippingTotal(false));
+            // FFT is not using tax
+            return parseFloat(0);
         },
         cartShippingTotalExcTax: function cartShippingTotalExcTax() {
             return this.cartShippingTotal(false);
