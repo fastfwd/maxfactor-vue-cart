@@ -314,7 +314,7 @@ var Data$1 = {
 
     methods: {
         generateUid: function generateUid() {
-            return Math.random().toString(36).slice(2);
+            return Math.random().toString(36).slice(2) + Date.now();
         }
     },
 
@@ -750,7 +750,7 @@ var Tell = function () {
     }, {
         key: 'randomUid',
         value: function randomUid() {
-            return Math.random().toString(36).slice(2);
+            return Math.random().toString(36).slice(2) + Date.now();
         }
     }, {
         key: 'serverVariable',
