@@ -13,7 +13,7 @@ class Tell {
      * TODO: Reduce length of id to around 10-12?
      */
     static randomUid() {
-        return Math.random().toString(36).slice(2)
+        return Math.random().toString(36).slice(2) + Date.now()
     }
 
     static serverVariable(variableKey, defaultValue = null) {
