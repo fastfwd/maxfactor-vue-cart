@@ -167,10 +167,6 @@ export default {
                         this.placeOrderBtn.disabled = false
                         this.placeOrderBtn.innerText = placeOrderLabel
                     }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
-                    }
                     return
                 }
 
@@ -180,10 +176,6 @@ export default {
                         this.placeOrderBtn.disabled = false
                         this.placeOrderBtn.innerText = placeOrderLabel
                     }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
-                    }
                     return
                 }
 
@@ -192,10 +184,6 @@ export default {
                     if (this.placeOrderBtn) {
                         this.placeOrderBtn.disabled = false
                         this.placeOrderBtn.innerText = placeOrderLabel
-                    }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
                     }
                     return
                 }
@@ -340,15 +328,8 @@ export default {
          * @param {string} id
          */
         prepareCheckout(event, id = null) {
-            if(this.formIsLoading) {
-                return;
-            }
-            this.processCheckoutBtn = event.target;
-            this.processCheckoutBtn.disabled = true;
-            this.processCheckoutBtnOldValue = event.target.innerText;
-            this.processCheckoutBtn.innerText = 'Processing...';
-            this.action = event.target.getAttribute('data-url');
-            this.formIsLoading = true;
+            this.formIsLoading = true
+            this.action = event.target.dataset.url
 
             const checkoutId = id || Tell.serverVariable('uid') || this.activeCartCollection.uid
 
@@ -612,10 +593,6 @@ export default {
                     this.placeOrderBtn.disabled = false
                     this.placeOrderBtn.innerText = placeOrderLabel
                 }
-                if (this.processCheckoutBtn) {
-                    this.processCheckoutBtn.disabled = false;
-                    this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
-                }
             })
         },
 
@@ -818,11 +795,6 @@ export default {
              * the user from performing further actions.
              */
             this.formIsLoading = true
-
-             /**
-             * Set the default value of the process checkout button
-             */
-            this.processCheckoutBtnOldValue = 'Continue'
 
             /**
              * The user will have been trying to do something funky to get here,

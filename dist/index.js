@@ -919,10 +919,6 @@ var MaxfactorCheckoutMixin = {
                         this.placeOrderBtn.disabled = false;
                         this.placeOrderBtn.innerText = placeOrderLabel;
                     }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
-                    }
                     return;
                 }
 
@@ -932,10 +928,6 @@ var MaxfactorCheckoutMixin = {
                         this.placeOrderBtn.disabled = false;
                         this.placeOrderBtn.innerText = placeOrderLabel;
                     }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
-                    }
                     return;
                 }
 
@@ -944,10 +936,6 @@ var MaxfactorCheckoutMixin = {
                     if (this.placeOrderBtn) {
                         this.placeOrderBtn.disabled = false;
                         this.placeOrderBtn.innerText = placeOrderLabel;
-                    }
-                    if (this.processCheckoutBtn) {
-                        this.processCheckoutBtn.disabled = false;
-                        this.processCheckoutBtn.innerText = this.processCheckoutBtnOldValue;
                     }
                     return;
                 }
@@ -1078,15 +1066,8 @@ var MaxfactorCheckoutMixin = {
         prepareCheckout: function prepareCheckout(event) {
             var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-            if (this.formIsLoading) {
-                return;
-            }
-            this.processCheckoutBtn = event.target;
-            this.processCheckoutBtn.disabled = true;
-            this.processCheckoutBtnOldValue = event.target.innerText;
-            this.processCheckoutBtn.innerText = 'Processing...';
-            this.action = event.target.getAttribute('data-url');
             this.formIsLoading = true;
+            this.action = event.target.dataset.url;
 
             var checkoutId = id || Tell.serverVariable('uid') || this.activeCartCollection.uid;
 
@@ -1352,10 +1333,6 @@ var MaxfactorCheckoutMixin = {
                     _this3.placeOrderBtn.disabled = false;
                     _this3.placeOrderBtn.innerText = placeOrderLabel;
                 }
-                if (_this3.processCheckoutBtn) {
-                    _this3.processCheckoutBtn.disabled = false;
-                    _this3.processCheckoutBtn.innerText = _this3.processCheckoutBtnOldValue;
-                }
             });
         },
 
@@ -1570,11 +1547,6 @@ var MaxfactorCheckoutMixin = {
              * the user from performing further actions.
              */
             this.formIsLoading = true;
-
-            /**
-            * Set the default value of the process checkout button
-            */
-            this.processCheckoutBtnOldValue = 'Continue';
 
             /**
              * The user will have been trying to do something funky to get here,
