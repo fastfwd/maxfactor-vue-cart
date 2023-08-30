@@ -307,7 +307,8 @@ export default {
          */
         setActiveCheckout(id, force = false) {
             if (
-                this.currentCheckout.uid === this.checkoutCollection(id).first().uid
+                this.currentCheckout
+                && this.currentCheckout.uid === this.checkoutCollection(id).first().uid
                 && !force
             ) {
                 return
