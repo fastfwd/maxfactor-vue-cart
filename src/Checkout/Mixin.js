@@ -329,7 +329,7 @@ export default {
             if (this.currentCheckout.uid !== id) return
 
             this.currentCheckout.items = Make.cloneOf(data.items)
-            this.currentCheckout.notes = Make.cloneOf(data.notes)
+            this.currentCheckout.notes = data.notes
             this.checkoutCollection(id).first().items = Make.cloneOf(data.items)
         },
 
