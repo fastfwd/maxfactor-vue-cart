@@ -1043,7 +1043,7 @@ var MaxfactorCheckoutMixin = {
         setActiveCheckout: function setActiveCheckout(id) {
             var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            if (this.currentCheckout.uid === this.checkoutCollection(id).first().uid && !force) {
+            if (this.currentCheckout && this.currentCheckout.uid === this.checkoutCollection(id).first().uid && !force) {
                 return;
             }
 
